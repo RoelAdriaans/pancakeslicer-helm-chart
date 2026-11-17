@@ -6,14 +6,33 @@ Deploys PancakeSlicer (web UI, service and slicing engine in one container) on K
 
 ## Install
 
+### From the Helm repository
+
+```sh
+helm repo add pancakeslicer https://roeladriaans.github.io/pancakeslicer-helm-chart/
+helm repo update
+helm install pancakeslicer pancakeslicer/pancakeslicer -n pancakeslicer
+```
+
+### From a local checkout
+
 ```sh
 helm install pancakeslicer ./pancakeslicer \
   --set ingress.enabled=true \
   --set ingress.hosts[0].host=pancake.example.com \
-  --set ingress.hosts[0].paths[0].path=/
+  --set ingress.hosts[0].paths[0].path=/ \
+  -n pancakeslicer
 ```
 
+The chart creates the `pancakeslicer` namespace and installs all resources into it, so do not pass `--create-namespace`. Note that `helm uninstall` removes the namespace, including the data volume.
+
 ## Values
+
+### Namespace
+
+| Value | Default | Description |
+|---|---|---|
+| `namespace` | `pancakeslicer` | Namespace the chart creates and installs into. Pass the same name to `helm -n`. |
 
 ### Image
 
