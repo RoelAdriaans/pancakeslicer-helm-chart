@@ -75,6 +75,57 @@ The chart creates the `pancakeslicer` namespace and installs all resources into 
 | `ingress.hosts` | one example host | List of `{host, paths: [{path, pathType}]}`. `pathType` defaults to `Prefix`. |
 | `ingress.tls` | `[]` | Standard Ingress TLS list: `{secretName, hosts}`. |
 
+#### Example: basic authentication (ingress-nginx)
+
+> **Warning:** PancakeSlicer has no built-in user authentication. If you expose it through an Ingress, **anyone who can reach it, including the whole internet, can use it**. Always put authentication in front of it (and use TLS) before exposing it publicly.
+
+Generate an htpasswd entry (the Secret key must be named `auth`):
+
+```sh
+htpasswd -nb admin 'my-password'   # prints admin:$apr1$...
+```
+
+Then define the Secret through `extraObjects` so it is deployed with the chart, in one release:
+
+```yaml
+extraObjects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: pancakeslicer-basic-auth
+      namespace: pancakeslicer
+    type: Opaque
+    stringData:
+      auth: "admin:$apr1$REPLACE_WITH_HTPASSWD_HASH"
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 512m
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: pancakeslicer-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+  hosts:
+    - host: pancake.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: pancakeslicer-tls
+      hosts:
+        - pancake.example.com
+```
+
+Other ingress controllers use different annotations.
+
+> **Recommendation:** Don't store the password hash in plain text in your values files or version control. Encrypt the values with [SOPS](https://github.com/getsops/sops) (e.g. via `helm secrets`), or use an external secret provider such as [External Secrets Operator](https://external-secrets.io/) (add an `ExternalSecret` through `extraObjects` instead of the `Secret`).
+
+### Extra objects
+
+| Value | Default | Description |
+|---|---|---|
+| `extraObjects` | `[]` | List of additional Kubernetes objects (YAML maps or strings) rendered with the chart. Values are passed through `tpl`. Set `metadata.namespace` to the chart namespace. |
+
 ### Persistence (volume `pancakeslicer-data`)
 
 Holds projects, profiles, printers, preferences and jobs. Mounted at `/data`.

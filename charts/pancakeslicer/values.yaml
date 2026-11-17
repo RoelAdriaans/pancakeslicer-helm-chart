@@ -61,3 +61,6 @@ securityContext:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# Extra Kubernetes objects to deploy with the chart (maps or strings; templated with tpl).
+extraObjects: []
