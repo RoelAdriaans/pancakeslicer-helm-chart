@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pancakeslicer
+description: PancakeSlicer web UI, service and slicing engine in one container
+type: application
+version: 0.1.0
+appVersion: "latest"
