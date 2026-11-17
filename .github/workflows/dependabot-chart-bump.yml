@@ -1,0 +1,39 @@
+name: Dependabot Chart Bump
+
+on:
+  pull_request_target:
+    paths:
+      - charts/pancakeslicer/values.yaml
+
+jobs:
+  bump:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Sync appVersion and bump chart version
+        run: |
+          set -euo pipefail
+          chart=charts/pancakeslicer/Chart.yaml
+          tag=$(sed -n 's/^  tag: "\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' charts/pancakeslicer/values.yaml | head -n1)
+          current=$(sed -n 's/^appVersion: "\(.*\)"$/\1/p' "$chart")
+          if [ -z "$tag" ] || [ "$tag" = "$current" ]; then
+            echo "Nothing to do"
+            exit 0
+          fi
+          version=$(sed -n 's/^version: //p' "$chart")
+          IFS=. read -r major minor patch <<< "$version"
+          new_version="$major.$minor.$((patch + 1))"
+          sed -i "s/^appVersion: .*/appVersion: \"$tag\"/" "$chart"
+          sed -i "s/^version: .*/version: $new_version/" "$chart"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$chart"
+          git commit -m "chore: bump chart to $new_version (appVersion $tag)"
+          git push

@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Tracks the zimengxiong/pancakeslicer image tag in values.yaml
+  - package-ecosystem: "helm"
+    directory: "/charts/pancakeslicer"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
