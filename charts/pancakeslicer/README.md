@@ -39,7 +39,7 @@ The chart creates the `pancakeslicer` namespace and installs all resources into 
 | Value | Default | Description |
 |---|---|---|
 | `image.repository` | `zimengxiong/pancakeslicer` | Container image. |
-| `image.tag` | `latest` | Image tag. |
+| `image.tag` | `0.5.4` | Image tag. |
 | `image.pullPolicy` | `IfNotPresent` | Kubernetes image pull policy. |
 | `replicaCount` | `1` | Number of replicas. Keep at 1: state lives on a single `ReadWriteOnce` volume and the Deployment uses the `Recreate` strategy. |
 

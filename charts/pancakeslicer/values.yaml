@@ -1,6 +1,6 @@
 image:
   repository: zimengxiong/pancakeslicer
-  tag: latest
+  tag: "0.5.4"
   pullPolicy: IfNotPresent
 
 # Namespace the chart creates and installs into.
