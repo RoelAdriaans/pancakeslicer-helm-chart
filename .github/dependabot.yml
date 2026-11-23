@@ -5,6 +5,8 @@ updates:
     directory: "/charts/pancakeslicer"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 0
 
   - package-ecosystem: "github-actions"
     directory: "/"
