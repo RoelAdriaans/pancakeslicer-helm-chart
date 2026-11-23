@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   pancakeslicer:
   - apiVersion: v2
+    appVersion: 0.5.5
+    created: "2026-11-23T08:50:08.157168383Z"
+    description: PancakeSlicer web UI, service and slicing engine in one container
+    digest: d608c501bfa8c7b3c4697b8721b0edabbd4e21c24b1ff6d51a93a871afebc9ee
+    name: pancakeslicer
+    type: application
+    urls:
+    - https://github.com/RoelAdriaans/pancakeslicer-helm-chart/releases/download/pancakeslicer-0.1.4/pancakeslicer-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 0.5.4
     created: "2026-11-17T22:26:09.072382993Z"
     description: PancakeSlicer web UI, service and slicing engine in one container
@@ -41,4 +51,4 @@ entries:
     urls:
     - https://github.com/RoelAdriaans/pancakeslicer-helm-chart/releases/download/pancakeslicer-0.1.0/pancakeslicer-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-17T22:26:09.072395962Z"
+generated: "2026-11-23T08:50:08.157179179Z"
