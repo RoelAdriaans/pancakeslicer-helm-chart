@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PancakeSlicer chart values",
+  "type": "object",
+  "properties": {
+    "image": {
+      "type": "object",
+      "description": "Container image settings.",
+      "properties": {
+        "repository": { "type": "string", "description": "Image repository." },
+        "tag": { "type": "string", "description": "Image tag." },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "description": "Image pull policy."
+        }
+      }
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Namespace the chart creates and installs into."
+    },
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of replicas."
+    },
+    "config": {
+      "type": "object",
+      "description": "Application configuration.",
+      "properties": {
+        "maxJobs": {
+          "type": "string",
+          "description": "Slices running at once; more queue."
+        },
+        "printerNetwork": {
+          "type": "string",
+          "description": "lan, off, or comma-separated CIDRs/host names."
+        },
+        "stageCacheMaxMb": {
+          "type": "string",
+          "description": "Engine stage cache cap in MB (disposable)."
+        }
+      }
+    },
+    "bearerToken": {
+      "type": "string",
+      "description": "Token required for changes. Set either bearerToken or existingSecret."
+    },
+    "existingSecret": {
+      "type": "string",
+      "description": "Existing secret containing key ORCA_WEB_BEARER_TOKEN."
+    },
+    "service": {
+      "type": "object",
+      "description": "Service settings.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+          "description": "Service type."
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Service port."
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "description": "Ingress settings.",
+      "properties": {
+        "enabled": { "type": "boolean", "description": "Enable ingress." },
+        "className": { "type": "string", "description": "Ingress class name." },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Ingress annotations."
+        },
+        "hosts": {
+          "type": "array",
+          "description": "Ingress hosts.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": { "type": "string" },
+                    "pathType": {
+                      "type": "string",
+                      "enum": ["Prefix", "Exact", "ImplementationSpecific"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tls": {
+          "type": "array",
+          "description": "Ingress TLS configuration.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "secretName": { "type": "string" },
+              "hosts": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "description": "Persistent storage settings.",
+      "properties": {
+        "enabled": { "type": "boolean", "description": "Enable persistence." },
+        "name": { "type": "string", "description": "PVC name." },
+        "existingClaim": { "type": "string", "description": "Use an existing PVC." },
+        "storageClass": { "type": "string", "description": "Storage class." },
+        "accessModes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "PVC access modes."
+        },
+        "size": { "type": "string", "description": "PVC size." }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "description": "Pod resource requests and limits."
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "description": "Pod security context."
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Container security context."
+    },
+    "nodeSelector": { "type": "object", "description": "Node selector." },
+    "tolerations": { "type": "array", "description": "Tolerations." },
+    "affinity": { "type": "object", "description": "Affinity rules." },
+    "extraObjects": {
+      "type": "array",
+      "description": "Extra Kubernetes objects to deploy (maps or strings; templated with tpl)."
+    }
+  }
+}
